@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cinema>
+    <nomCinema>Cinéma Invalide</nomCinema>
+
+    <films>
+        <!-- Erreur 1: id manquant -->
+        <film enPromotion="true">
+            <titre>Inception</titre>
+            <realisateur>Christopher Nolan</realisateur>
+            <!-- Erreur 2: Genre invalide -->
+            <genre>Horreur</genre>
+            <duree>148</duree>
+            <annee>2010</annee>
+            <!-- Erreur 3: Note > 5.0 -->
+            <note>6.5</note>
+            <prixBase>15.0</prixBase>
+            <acteurs>
+                <acteur role="Cobb">Leonardo DiCaprio</acteur>
+            </acteurs>
+        </film>
+    </films>
+
+    <salles>
+        <salle id="S1">
+            <nom>Salle IMAX 1</nom>
+            <capacite>300</capacite>
+            <equipements>
+                <equipement>Dolby Atmos</equipement>
+            </equipements>
+        </salle>
+    </salles>
+
+    <seances>
+        <!-- Erreur 4: Clé étrangère invalide (F999 n'existe pas) -->
+        <seance id="SE1" filmRef="F999" salleRef="S1">
+            <date>2025-12-20</date>
+            <heure>18:00</heure>
+            <placesDisponibles>120</placesDisponibles>
+        </seance>
+    </seances>
+
+    <clients>
+        <client id="C1" actif="true" abonnement="Standard">
+            <nom>Hela</nom>
+            <!-- Erreur 5: Email invalide -->
+            <email>hela-at-example.com</email>
+            <rue>12 Rue de la Paix</rue>
+            <ville>Paris</ville>
+            <codePostal>75001</codePostal>
+        </client>
+    </clients>
+</cinema>

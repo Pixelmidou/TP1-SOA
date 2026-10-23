@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cinema>
+    <nomCinema>Le Grand Rex</nomCinema>
+
+    <films>
+        <film id="F1" enPromotion="true">
+            <titre>Inception</titre>
+            <realisateur>Christopher Nolan</realisateur>
+            <genre>Science-fiction</genre>
+            <duree>148</duree>
+            <annee>2010</annee>
+            <note>4.8</note>
+            <prixBase>15.0</prixBase>
+            <promotion>
+                <pourcentage>20</pourcentage>
+            </promotion>
+            <acteurs>
+                <acteur role="Cobb">Leonardo DiCaprio</acteur>
+                <acteur role="Arthur">Joseph Gordon-Levitt</acteur>
+            </acteurs>
+            <avis>
+                <auteur>Amel</auteur>
+                <commentaire>Un chef d'oeuvre absolu.</commentaire>
+                <etoiles>5.0</etoiles>
+            </avis>
+        </film>
+        <film id="F2" enPromotion="false">
+            <titre>Le Parrain</titre>
+            <realisateur>Francis Ford Coppola</realisateur>
+            <genre>Drame</genre>
+            <duree>175</duree>
+            <annee>1972</annee>
+            <note>4.9</note>
+            <prixBase>12.0</prixBase>
+            <acteurs>
+                <acteur role="Michael">Al Pacino</acteur>
+                <acteur role="Vito">Marlon Brando</acteur>
+            </acteurs>
+        </film>
+    </films>
+
+    <salles>
+        <salle id="S1">
+            <nom>Salle IMAX 1</nom>
+            <capacite>300</capacite>
+            <equipements>
+                <equipement>Dolby Atmos</equipement>
+                <equipement>4K Laser</equipement>
+                <equipement>Sièges inclinables</equipement>
+            </equipements>
+        </salle>
+        <salle id="S2">
+            <nom>Salle Standard</nom>
+            <capacite>150</capacite>
+            <equipements>
+                <equipement>Son 7.1</equipement>
+            </equipements>
+        </salle>
+    </salles>
+
+    <seances>
+        <seance id="SE1" filmRef="F1" salleRef="S1">
+            <date>2025-12-20</date>
+            <heure>18:00</heure>
+            <placesDisponibles>120</placesDisponibles>
+        </seance>
+        <seance id="SE2" filmRef="F2" salleRef="S2">
+            <date>2025-12-21</date>
+            <heure>20:30</heure>
+            <placesDisponibles>50</placesDisponibles>
+        </seance>
+    </seances>
+
+    <clients>
+        <!-- Client standard -->
+        <client id="C1" actif="true" abonnement="Standard">
+            <nom>Hela</nom>
+            <email>hela@example.com</email>
+            <rue>12 Rue de la Paix</rue>
+            <ville>Paris</ville>
+            <codePostal>75001</codePostal>
+        </client>
+
+        <!-- Client VIP -->
+        <clientVIP id="C2" actif="true" abonnement="Premium">
+            <nom>Amel</nom>
+            <email>amel.zayani@example.com</email>
+            <rue>8 Avenue Habib Bourguiba</rue>
+            <ville>Tunis</ville>
+            <codePostal>1000</codePostal>
+            <numeroCarteVIP>VIP-999-AAA</numeroCarteVIP>
+            <reservations>
+                <reservation seanceRef="SE1">
+                    <nombrePlaces>4</nombrePlaces>
+                    <prixTotal>48.0</prixTotal>
+                </reservation>
+            </reservations>
+        </clientVIP>
+    </clients>
+</cinema>

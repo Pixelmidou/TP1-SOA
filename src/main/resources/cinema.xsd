@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Groupes réutilisables -->
+    <xs:attributeGroup name="EntityAttributes">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:attributeGroup>
+
+    <xs:group name="AdresseGroup">
+        <xs:sequence>
+            <xs:element name="rue" type="xs:string"/>
+            <xs:element name="ville" type="xs:string"/>
+            <xs:element name="codePostal" type="xs:string"/>
+        </xs:sequence>
+    </xs:group>
+
+    <!-- Types simples -->
+    <xs:simpleType name="GenreType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Science-fiction"/>
+            <xs:enumeration value="Drame"/>
+            <xs:enumeration value="Action"/>
+            <xs:enumeration value="Comédie"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="EmailType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="NoteType">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0.0"/>
+            <xs:maxInclusive value="5.0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="AbonnementType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Premium"/>
+            <xs:enumeration value="Standard"/>
+            <xs:enumeration value="Etudiant"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Types complexes -->
+    <xs:complexType name="PromotionType">
+        <xs:choice>
+            <xs:element name="pourcentage" type="xs:positiveInteger"/>
+            <xs:element name="montantFixe" type="xs:decimal"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="AvisType">
+        <xs:sequence>
+            <xs:element name="auteur" type="xs:string"/>
+            <xs:element name="commentaire" type="xs:string"/>
+            <xs:element name="etoiles" type="NoteType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ActeurType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="role" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="FilmType">
+        <xs:sequence>
+            <xs:element name="titre" type="xs:string"/>
+            <xs:element name="realisateur" type="xs:string"/>
+            <xs:element name="genre" type="GenreType"/>
+            <xs:element name="duree" type="xs:positiveInteger"/>
+            <xs:element name="annee" type="xs:gYear"/>
+            <xs:element name="note" type="NoteType"/>
+            <xs:element name="prixBase" type="xs:decimal"/>
+            <xs:element name="promotion" type="PromotionType" minOccurs="0"/>
+            <xs:element name="acteurs">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="acteur" type="ActeurType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="avis" type="AvisType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="EntityAttributes"/>
+        <xs:attribute name="enPromotion" type="xs:boolean" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="SalleType">
+        <xs:sequence>
+            <xs:element name="nom" type="xs:string"/>
+            <xs:element name="capacite" type="xs:positiveInteger"/>
+            <xs:element name="equipements">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="equipement" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="EntityAttributes"/>
+    </xs:complexType>
+
+    <xs:complexType name="SeanceType">
+        <xs:sequence>
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="heure" type="xs:string"/>
+            <xs:element name="placesDisponibles" type="xs:nonNegativeInteger"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="EntityAttributes"/>
+        <xs:attribute name="filmRef" type="xs:string" use="required"/>
+        <xs:attribute name="salleRef" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ReservationType">
+        <xs:sequence>
+            <xs:element name="nombrePlaces" type="xs:positiveInteger"/>
+            <xs:element name="prixTotal" type="xs:decimal"/>
+        </xs:sequence>
+        <xs:attribute name="seanceRef" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ClientBaseType">
+        <xs:sequence>
+            <xs:element name="nom" type="xs:string"/>
+            <xs:element name="email" type="EmailType"/>
+            <xs:group ref="AdresseGroup"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="EntityAttributes"/>
+        <xs:attribute name="actif" type="xs:boolean" use="required"/>
+        <xs:attribute name="abonnement" type="AbonnementType" use="required"/>
+    </xs:complexType>
+
+    <!-- Client VIP (héritage) -->
+    <xs:complexType name="ClientVIPType">
+        <xs:complexContent>
+            <xs:extension base="ClientBaseType">
+                <xs:sequence>
+                    <xs:element name="numeroCarteVIP" type="xs:string"/>
+                    <xs:element name="reservations" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="reservation" type="ReservationType" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- Élément racine -->
+    <xs:element name="cinema">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="nomCinema" type="xs:string"/>
+                <xs:element name="films">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="film" type="FilmType" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="salles">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="salle" type="SalleType" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="seances">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="seance" type="SeanceType" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="clients">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:choice maxOccurs="unbounded">
+                                <xs:element name="client" type="ClientBaseType"/>
+                                <xs:element name="clientVIP" type="ClientVIPType"/>
+                            </xs:choice>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+
+        <!-- Clés primaires et étrangères -->
+        <xs:key name="filmKey">
+            <xs:selector xpath="films/film"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+        <xs:key name="salleKey">
+            <xs:selector xpath="salles/salle"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+        <xs:keyref name="seanceFilmRef" refer="filmKey">
+            <xs:selector xpath="seances/seance"/>
+            <xs:field xpath="@filmRef"/>
+        </xs:keyref>
+
+        <xs:keyref name="seanceSalleRef" refer="salleKey">
+            <xs:selector xpath="seances/seance"/>
+            <xs:field xpath="@salleRef"/>
+        </xs:keyref>
+    </xs:element>
+
+</xs:schema>
